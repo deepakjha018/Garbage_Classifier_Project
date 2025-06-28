@@ -1,46 +1,66 @@
 import streamlit as st
-import tensorflow as tf
-import numpy as np
-import json
+import requests
 from PIL import Image
-import os
+import io
 
-# Paths
-MODEL_PATH = "model/model.h5"
-LABEL_MAP_PATH = "model/label_map.json"
-IMG_SIZE = (128, 128)
+# ========== CONFIGURATION ==========
+API_URL = "http://127.0.0.1:8000/predict"
 
-# Load model and label map
-@st.cache_resource
-def load_model():
-    model = tf.keras.models.load_model(MODEL_PATH)
-    with open(LABEL_MAP_PATH, 'r') as f:
-        label_map = json.load(f)
-    reverse_map = {v: k for k, v in label_map.items()}
-    return model, reverse_map
+st.set_page_config(page_title="Garbage Classifier", page_icon="🗑️", layout="centered")
 
-model, label_map = load_model()
+# ========== STYLING ==========
+st.markdown("""
+    <style>
+    .title {
+        text-align: center;
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #2E8B57;
+        margin-bottom: 0.3em;
+    }
+    .subtitle {
+        text-align: center;
+        font-size: 1.2em;
+        color: #444;
+        margin-bottom: 1.5em;
+    }
+    .footer {
+        text-align: center;
+        font-size: 0.9em;
+        color: #888;
+        margin-top: 2em;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-# UI
-st.title("🗑️ Garbage Classification")
-st.markdown("Upload an image of garbage and let the model predict the type.")
+# ========== HEADER ==========
+st.markdown('<div class="title">🧠 Garbage Image Classifier</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Upload an image and let the AI predict the type of waste</div>', unsafe_allow_html=True)
 
-uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+# ========== IMAGE UPLOAD ==========
+uploaded_file = st.file_uploader("📤 Upload a Garbage Image", type=["jpg", "jpeg", "png"])
 
-if uploaded_file is not None:
-    image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption='Uploaded Image', use_column_width=True)
+if uploaded_file:
+    # Show preview
+    image = Image.open(uploaded_file)
+    st.image(image, caption="Uploaded Image", use_container_width=True)
 
-    # Preprocess
-    img = image.resize(IMG_SIZE)
-    img_array = np.array(img) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
+    # Send image to API
+    with st.spinner("🧠 Analyzing..."):
+        response = requests.post(
+            API_URL,
+            files={"file": uploaded_file.getvalue()}
+        )
+    
+    if response.status_code == 200:
+        result = response.json()
+        if "error" in result:
+            st.error(f"❌ Error: {result['error']}")
+        else:
+            st.success(f"✅ Predicted Class: **{result['prediction'].capitalize()}**")
+            st.info(f"🎯 Confidence: **{result['confidence']}%**")
+    else:
+        st.error("Something went wrong. Please try again.")
 
-    # Predict
-    prediction = model.predict(img_array)
-    class_index = np.argmax(prediction)
-    confidence = prediction[0][class_index] * 100
-    predicted_label = label_map[class_index]
-
-    st.success(f"Predicted: **{predicted_label}**")
-    st.info(f"Confidence: **{confidence:.2f}%**")
+# ========== FOOTER ==========
+st.markdown('<div class="footer">Built with ❤️ using FastAPI & Streamlit</div>', unsafe_allow_html=True)
