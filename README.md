@@ -38,7 +38,17 @@ https://garbage-classifier-vk18.streamlit.app/
 
 ### Prediction Result
 
-<img src="extra/screenshots/prediction.png">
+<img src="extra/screenshots/Bottle_prediction.png">
+
+<img src="extra/screenshots/Cardboard_prediction.png">
+
+<img src="extra/screenshots/Glass_prediction.png">
+
+<img src="extra/screenshots/Metal_prediction.png">
+
+<img src="extra/screenshots/Paper_prediction.png">
+
+<img src="extra/screenshots/Trash_prediction.png">
 
 
 ---
