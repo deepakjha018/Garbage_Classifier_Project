@@ -6,6 +6,8 @@ An end-to-end AI project to classify garbage images using Convolutional Neural N
 
 ## 🔍 Project Structure
 
+```
+
 garbage-classifier/
 ├── backend/ # FastAPI backend with prediction API
 ├── data/ # Raw and preprocessed image data
@@ -15,6 +17,7 @@ garbage-classifier/
 ├── utils/ # Preprocessing script
 └── requirements.txt # Project dependencies
 
+```
 
 ---
 
