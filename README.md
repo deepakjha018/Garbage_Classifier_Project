@@ -25,7 +25,7 @@ The system allows users to upload an image of waste material, analyzes it using 
 ## 🚀 Live Demo
 
 🔗 **Application Link:**  
-[live link](https://garbage-classifier-vk18.streamlit.app/)
+https://garbage-classifier-vk18.streamlit.app/
 
 ---
 
