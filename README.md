@@ -61,24 +61,3 @@ streamlit run app.py
 📎 License
 This project is open-source under the MIT License.
 
-
-Let me know if you'd like to customize your GitHub profile badge, author name, or banner.
-
----
-
-## ✅ 3. Steps to Push These to GitHub
-
-From your root folder (`Garbage Classifier Project/`):
-
-```bash
-# Step 1: Create the files
-echo "[your .gitignore content]" > .gitignore
-echo "[your readme content]" > README.md
-
-# Step 2: Add and commit
-git add .gitignore README.md
-git commit -m "Added .gitignore and README"
-
-# Step 3: Push to GitHub
-git push origin main
-
