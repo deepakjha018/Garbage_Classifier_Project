@@ -186,32 +186,118 @@ def predict_image(image):
 
 
 
-# ==============================
-# USER INTERFACE
-# ==============================
+# ============================
+# UI
+# ============================
 
 
 st.markdown(
-"<div class='title'>♻️ Garbage Image Classifier</div>",
+"""
+<style>
+
+.main-title{
+text-align:center;
+font-size:48px;
+font-weight:800;
+color:#22c55e;
+}
+
+
+.sub{
+text-align:center;
+font-size:18px;
+color:#9ca3af;
+}
+
+
+.card{
+
+background:#161b22;
+padding:25px;
+border-radius:15px;
+margin-top:20px;
+
+}
+
+
+.metric{
+
+font-size:22px;
+font-weight:bold;
+
+}
+
+
+</style>
+
+""",
 unsafe_allow_html=True
 )
 
 
 
 st.markdown(
-"<div class='subtitle'>AI Powered Waste Classification System using Deep Learning</div>",
+"""
+<div class="main-title">
+♻️ Garbage Image Classifier
+</div>
+
+<div class="sub">
+
+AI-powered smart waste classification system using Transfer Learning
+
+</div>
+
+""",
 unsafe_allow_html=True
 )
 
+
+st.write("")
+
+
+col1,col2,col3=st.columns(3)
+
+
+with col1:
+
+    st.metric(
+        "Model",
+        "MobileNetV2"
+    )
+
+
+with col2:
+
+    st.metric(
+        "Accuracy",
+        "86.34%"
+    )
+
+
+with col3:
+
+    st.metric(
+        "Classes",
+        "6"
+    )
 
 
 st.write("---")
 
 
+st.info(
+"""
+Upload an image of waste material and the AI model will classify it into:
+
+📦 Cardboard | 🍾 Glass | 🔩 Metal | 📄 Paper | 🧴 Plastic | 🗑️ Trash
+"""
+)
+
 
 uploaded_file=st.file_uploader(
 
-    "📤 Upload Waste Image",
+    "📤 Upload Garbage Image",
 
     type=[
         "jpg",
@@ -222,13 +308,10 @@ uploaded_file=st.file_uploader(
 )
 
 
-
 if uploaded_file:
 
 
-    image=Image.open(
-        uploaded_file
-    )
+    image=Image.open(uploaded_file)
 
 
     st.image(
@@ -242,9 +325,8 @@ if uploaded_file:
     )
 
 
-
     with st.spinner(
-        "🧠 AI is analyzing waste..."
+        "🧠 AI is analyzing image..."
     ):
 
 
@@ -253,11 +335,11 @@ if uploaded_file:
         )
 
 
-
     st.success(
-        f"✅ Predicted Class : {label.upper()}"
-    )
 
+        f"✅ Prediction : {label.upper()}"
+
+    )
 
 
     st.progress(
@@ -265,63 +347,49 @@ if uploaded_file:
     )
 
 
-
     st.info(
-        f"🎯 Confidence : {confidence}%"
+
+        f"🎯 Confidence Score : {confidence}%"
+
     )
 
 
 
-    recycle_tips={
-
+    tips={
 
         "plastic":
-
-        "♻️ Plastic waste should be cleaned and recycled properly.",
-
+        "🧴 Plastic waste should be recycled properly to reduce pollution.",
 
 
         "paper":
-
-        "📄 Paper waste can be reused or sent for recycling.",
-
+        "📄 Paper can be reused and recycled to save trees.",
 
 
         "cardboard":
-
-        "📦 Flatten cardboard boxes before recycling.",
-
+        "📦 Flatten cardboard before sending it for recycling.",
 
 
         "metal":
-
-        "🔩 Metal waste is highly recyclable.",
-
+        "🔩 Metal waste has high recycling value.",
 
 
         "glass":
-
-        "🍾 Glass should be separated and recycled safely.",
-
+        "🍾 Separate glass items for safe recycling.",
 
 
         "trash":
-
         "🗑️ Dispose general waste responsibly."
-
 
     }
 
 
 
-    if label.lower() in recycle_tips:
-
-
-        st.write(
-            recycle_tips[
-                label.lower()
-            ]
+    st.success(
+        tips.get(
+            label.lower(),
+            ""
         )
+    )
 
 
 
@@ -329,6 +397,23 @@ st.write("---")
 
 
 st.markdown(
-"<div class='footer'>Built using TensorFlow • MobileNetV2 • Streamlit</div>",
-unsafe_allow_html=True
+"""
+### 🚀 About Project
+
+This deep learning project uses **MobileNetV2 Transfer Learning**
+to classify waste images and promote smart recycling.
+
+**Tech Stack**
+
+- Python
+- TensorFlow / Keras
+- MobileNetV2
+- Streamlit
+
+"""
+)
+
+
+st.caption(
+"Developed as an upgraded version of Edunet Foundation Internship Project"
 )
