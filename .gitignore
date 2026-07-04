@@ -1,27 +1,25 @@
-# Byte-compiled / cache files
+# Python
 __pycache__/
-*.py[cod]
-*.ipynb_checkpoints
+*.pyc
 
-# Data and model artifacts
-data/raw/
-data/processed/
-model/model.h5
-model/label_map.json
-
-# Logs and outputs
-*.log
-*.csv
-*.json
-*.h5
-
-# Environment and dependency files
+# Virtual Environment
+venv/
 .venv/
 .env
 
-# VS Code
+# Dataset
+data/raw/
+data/processed/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Temporary files
+temp/
+
+# IDE
 .vscode/
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db

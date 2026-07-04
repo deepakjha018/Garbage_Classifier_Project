@@ -2,40 +2,106 @@ import os
 from PIL import Image
 import shutil
 
-# Constants
-RAW_DIR = "data/raw"
-PROCESSED_DIR = "data/processed"
-IMG_SIZE = (128, 128)
+
+
+RAW_DIR="data/raw"
+
+PROCESSED_DIR="data/processed"
+
+
+IMAGE_SIZE=(224,224)
+
+
 
 def preprocess_images():
-    if os.path.exists(PROCESSED_DIR):
-        shutil.rmtree(PROCESSED_DIR)
-    os.makedirs(PROCESSED_DIR, exist_ok=True)
 
-    for category in os.listdir(RAW_DIR):
-        input_folder = os.path.join(RAW_DIR, category)
 
-        # ✅ Skip files
-        if not os.path.isdir(input_folder):
+    if os.path.exists(
+        PROCESSED_DIR
+    ):
+        shutil.rmtree(
+            PROCESSED_DIR
+        )
+
+
+    os.makedirs(
+        PROCESSED_DIR,
+        exist_ok=True
+    )
+
+
+
+    for category in os.listdir(
+        RAW_DIR
+    ):
+
+
+        source=os.path.join(
+            RAW_DIR,
+            category
+        )
+
+
+        if not os.path.isdir(
+            source
+        ):
             continue
 
-        output_folder = os.path.join(PROCESSED_DIR, category)
-        os.makedirs(output_folder, exist_ok=True)
 
-        for file in os.listdir(input_folder):
-            input_path = os.path.join(input_folder, file)
-            output_path = os.path.join(output_folder, file)
+
+        destination=os.path.join(
+            PROCESSED_DIR,
+            category
+        )
+
+
+        os.makedirs(
+            destination,
+            exist_ok=True
+        )
+
+
+
+        for image in os.listdir(source):
+
 
             try:
-                print(f"📂 Processing: {input_path} → {output_path}")  # 🔍 Debug line
-                img = Image.open(input_path).convert("RGB")
-                img = img.resize(IMG_SIZE)
-                img.save(output_path)
-            except Exception as e:
-                print(f"❌ Failed to process {input_path}: {e}")
 
-    print(f"\n✅ Preprocessing complete. Processed images saved in '{PROCESSED_DIR}'")
+                img=Image.open(
+                    os.path.join(
+                        source,
+                        image
+                    )
+                ).convert(
+                    "RGB"
+                )
 
 
-if __name__ == "__main__":
+                img=img.resize(
+                    IMAGE_SIZE
+                )
+
+
+                img.save(
+                    os.path.join(
+                        destination,
+                        image
+                    )
+                )
+
+
+            except Exception:
+
+                pass
+
+
+
+    print(
+        "Preprocessing Completed"
+    )
+
+
+
+if __name__=="__main__":
+
     preprocess_images()

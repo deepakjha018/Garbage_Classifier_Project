@@ -1,6 +1,15 @@
 fastapi
 uvicorn
-pillow
-tensorflow
 python-multipart
+
+tensorflow
+keras
+
 numpy
+pillow
+
+streamlit
+requests
+
+matplotlib
+scikit-learn

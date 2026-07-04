@@ -1,41 +1,94 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-import shutil
-import os
 from predict import predict_image
 
-app = FastAPI()
+import shutil
+import os
+import uuid
 
-# Enable CORS for frontend communication (Streamlit or browser)
+
+app = FastAPI(
+    title="Garbage Image Classifier API",
+    description="AI based garbage classification system",
+    version="2.0"
+)
+
+
+# CORS
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Route to check API is running
+
+
 @app.get("/")
-def read_root():
-    return {"message": "Garbage Classifier API is running"}
+def home():
 
-# Predict route
+    return {
+        "status": "running",
+        "message": "Garbage Classifier API is active"
+    }
+
+
+
 @app.post("/predict")
-async def predict(file: UploadFile = File(...)):
+async def predict(
+    file: UploadFile = File(...)
+):
+
     try:
-        temp_file_path = f"temp_{file.filename}"
-        
-        # Save uploaded image temporarily
-        with open(temp_file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
 
-        # Run prediction
-        result = predict_image(temp_file_path)
+        os.makedirs(
+            "temp",
+            exist_ok=True
+        )
 
-        # Delete temporary image
-        os.remove(temp_file_path)
+
+        extension = file.filename.split(".")[-1]
+
+
+        filename = (
+            str(uuid.uuid4())
+            +
+            "."
+            +
+            extension
+        )
+
+
+        filepath=os.path.join(
+            "temp",
+            filename
+        )
+
+
+        with open(filepath,"wb") as buffer:
+
+            shutil.copyfileobj(
+                file.file,
+                buffer
+            )
+
+
+        result=predict_image(
+            filepath
+        )
+
+
+        if os.path.exists(filepath):
+            os.remove(filepath)
+
 
         return result
 
+
     except Exception as e:
-        return {"error": str(e)}
+
+        return {
+            "error":str(e)
+        }
